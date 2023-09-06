@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Box, useTheme, Input, Tooltip, Text, Touchable, Button } from '@adaptui/react-native-tailwind';
+import { Box, useTheme, Input, Touchable, Button, Select } from '@adaptui/react-native-tailwind';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Platform } from 'react-native';
 import { useEventsStore } from '../store/useEventsStore';
 import { router } from 'expo-router';
 import * as Crypto from 'expo-crypto'
-
 
 export default function AddEventModal() {
 
@@ -66,21 +65,26 @@ export default function AddEventModal() {
           <Box style={tw.style('w-full p-2')}>
             <Input placeholder='Description' value='' size='xl' onChangeText={setDescription} />
           </Box>
+             <Box style={tw.style('w-full p-2')}>
+              <Select options={[
+                { label: 'Option 1', value: '1' },
+              ]} />
+            </Box>
           <Box style={tw.style('w-full p-2')}>
 
             {!showPicker && (<Touchable onPress={togglePicker}>
               <Input placeholder='Select Date' size='xl' value={eventDate} editable={false} onPressIn={togglePicker} />
             </Touchable>)}
 
-              
+
             {showPicker && (
-            <DateTimePicker
-              mode='datetime'
-              value={date}
-              display='spinner'
-              onChange={onDateChange}
-              style={tw.style('w-full h-64 -mt-2.5 rounded-lg')}
-            />)
+              <DateTimePicker
+                mode='datetime'
+                value={date}
+                display='spinner'
+                onChange={onDateChange}
+                style={tw.style('w-full h-64 -mt-2.5 rounded-lg')}
+              />)
             }
 
             {
@@ -112,7 +116,7 @@ export default function AddEventModal() {
                 </Button>
               </Box>
             </Box>
-          </Box>
+            BS</Box>
         </Box>
       </Box>
     </Box>
