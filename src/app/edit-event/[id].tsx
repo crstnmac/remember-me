@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Box, useTheme, Input, Touchable, Button } from '@adaptui/react-native-tailwind';
+import { Box, useTheme, Input, Touchable, Button, Icon } from '@adaptui/react-native-tailwind';
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { Platform } from 'react-native';
-import { useEventsStore } from '../../store/useEventsStore';
-import { router, useLocalSearchParams } from 'expo-router';
+import { Alert, Platform } from 'react-native';
+import { Color, useEventsStore } from '../../store/useEventsStore';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import ColorPicker from '../../components/ColorPicker';
+import Feather from '@expo/vector-icons/Feather';
 
 
 export default function EditEventModal() {
@@ -18,6 +19,7 @@ export default function EditEventModal() {
   const tw = useTheme()
 
   const updateEvent = useEventsStore(state => state.updateEvent)
+  const deleteEvent = useEventsStore(state => state.removeEvent)
 
   const [date, setDate] = useState(new Date())
   const [showPicker, setShowPicker] = useState(false)
@@ -25,7 +27,10 @@ export default function EditEventModal() {
   const [title, setTitle] = useState(event?.title)
   const [description, setDescription] = useState(event?.description)
   const [eventDate, setEventDate] = useState(event?.date)
-  const [backgroundColor, setBackgroundColor] = useState(event?.backgroundColor || '#ffffff')
+  const [color, setColor] = useState<Color>({
+    backgroundColor: event?.color?.backgroundColor || '#ffffff',
+    textColor: event?.color?.textColor || '#000000'
+  })
 
   function togglePicker() {
     setShowPicker(!showPicker)
@@ -58,13 +63,51 @@ export default function EditEventModal() {
       title: title || '',
       description: description || '',
       date: eventDate || '',
-      backgroundColor: backgroundColor
+      color: color
     })
     router.back()
   }
 
+
   return (
     <Box style={tw.style('flex-1')}>
+    <Stack.Screen options={{
+                title: 'Edit Event',
+                presentation: 'modal',
+                headerRight: () => (
+                  <Button
+                  
+                  variant='solid'
+                  themeColor='danger'
+                  onPress={() => {
+                    Alert.alert(
+                      'Delete Event',
+                      'Are you sure you want to delete this event?',
+                      [
+                        {
+                          text: 'Cancel',
+                          style: 'cancel',
+                        },{
+                          text: 'Delete',
+                          style: 'destructive',
+                          onPress: () => {
+                            deleteEvent(id as string)
+                            router.back()
+                          }
+                        }
+                      ]
+                    )
+                   }}>
+                    
+                    <Feather name='trash-2' color="#ffff" size={20} />
+
+                  </Button>
+                  
+                )
+                    }}
+                />
+
+      
       <Box style={tw.style('flex-1 items-center justify-center')}>
         <Box style={tw.style('flex-1 w-full h-full')}>
           <Box style={tw.style('w-full p-2')}>
@@ -104,7 +147,7 @@ export default function EditEventModal() {
             }
           </Box>
           <Box style={tw.style('w-full p-2')}>
-            <ColorPicker color={backgroundColor} onChange={setBackgroundColor} />
+            <ColorPicker color={color} onChange={setColor} />
           </Box>
           <Box style={tw.style('flex-row justify-between items-center p-2 gap-2')}>
             <Box style={tw.style('flex-1')}>

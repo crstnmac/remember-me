@@ -1,9 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, router, useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import {  useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useTheme, AdaptUIProvider } from '@adaptui/react-native-tailwind';
@@ -68,7 +68,8 @@ function RootLayoutNav() {
               <Stack.Screen name="edit-event/[id]" options={{
                 title: 'Edit Event',
                 presentation: 'modal',
-              }} />
+              }} 
+              />
             </Stack>
           </ThemeProvider>
         </SafeAreaProvider>

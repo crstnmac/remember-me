@@ -9,7 +9,6 @@ export default function TabOneScreen() {
   const tw = useTheme()
 
   const events = useEventsStore(state => state.events)
-  const clearEvents = useEventsStore(state => state.clearEvents)
 
   return (
     <Box style={tw.style('flex-1 items-center justify-center')}>
@@ -37,12 +36,6 @@ export default function TabOneScreen() {
               Add
             </Button>
           </Link>
-        </Box>
-
-        <Box style={tw.style('flex-1')}>
-          <Button variant='solid' size='xl' themeColor='secondary' onPress={clearEvents} >
-            Clear
-          </Button>
         </Box>
       </Box>
     </Box>

@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Box, useTheme, Input, Touchable, Button } from '@adaptui/react-native-tailwind';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Platform } from 'react-native';
-import { useEventsStore } from '../store/useEventsStore';
+import { Color, useEventsStore } from '../store/useEventsStore';
 import { router } from 'expo-router';
 import * as Crypto from 'expo-crypto'
 import ColorPicker from '../components/ColorPicker';
-
 
 export default function AddEventModal() {
 
@@ -20,7 +19,10 @@ export default function AddEventModal() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [eventDate, setEventDate] = useState('')
-  const [backgroundColor, setBackgroundColor] = useState(tw.getColor('bg-white-900') || '#ffffff')
+  const [color, setColor] = useState<Color>({
+    backgroundColor: '#ffffff',
+    textColor: '#000000'
+  })
 
   function togglePicker() {
     setShowPicker(!showPicker)
@@ -53,7 +55,7 @@ export default function AddEventModal() {
       title: title,
       description: description,
       date: eventDate,
-      backgroundColor: backgroundColor
+      color: color
     })
     router.back()
   }
@@ -99,7 +101,7 @@ export default function AddEventModal() {
             }
 
             <Box style={tw.style('w-full pt-4')}>
-              <ColorPicker color={backgroundColor} onChange={setBackgroundColor} />
+              <ColorPicker color={color} onChange={setColor} />
             </Box>
             <Box style={tw.style('flex-row justify-between items-center py-4 gap-2')}>
               <Box style={tw.style('flex-1')}>
