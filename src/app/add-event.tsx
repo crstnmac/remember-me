@@ -116,7 +116,7 @@ export default function AddEventModal() {
                 </Button>
               </Box>
             </Box>
-            BS</Box>
+            </Box>
         </Box>
       </Box>
     </Box>
