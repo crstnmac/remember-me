@@ -1,7 +1,8 @@
 import { useEventsStore } from '../../store/useEventsStore';
 import { Button, useTheme, Box, Text } from '@adaptui/react-native-tailwind';
 import { FlatList } from 'react-native-gesture-handler';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import Card from '../../components/Card';
 
 export default function TabOneScreen() {
 
@@ -9,10 +10,6 @@ export default function TabOneScreen() {
 
   const events = useEventsStore(state => state.events)
   const clearEvents = useEventsStore(state => state.clearEvents)
-  const removeEvent = useEventsStore(state => state.removeEvent)
-
-
-  console.log(events)
 
   return (
     <Box style={tw.style('flex-1 items-center justify-center')}>
@@ -27,15 +24,8 @@ export default function TabOneScreen() {
             </Box>
           )}
           renderItem={({ item }) => (
-            <Button variant='outline' themeColor='base' onLongPress={() =>removeEvent(item.id)}>
-              <Box style={tw.style('w-full p-2')}>
-                <Text style={tw.style('text-xl font-bold')}>{item.title}</Text>
-                <Text style={tw.style('text-lg font-semibold')}>{item.description}</Text>
-                <Text>{item.date.toString()}</Text>
-              </Box>
-            </Button>
+              <Card item={item} />
           )}
-          // estimatedItemSize={100}
           keyExtractor={(item) => item.id}
         />
       </Box>

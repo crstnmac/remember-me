@@ -1,29 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { Box, Text, useTheme } from "@adaptui/react-native-tailwind";
 
-import { Text, View } from '../../components/Themed';
+export default function TabTwoScreen(){
 
-export default function TabTwoScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-    </View>
-  );
+  const tw = useTheme()
+
+  return(
+    <Box style={tw.style('flex-1 items-center p-2')}>
+      <Text style={tw.style('text-xl font-bold')} >Remember Me</Text>
+    </Box>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

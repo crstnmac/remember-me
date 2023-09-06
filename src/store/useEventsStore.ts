@@ -2,11 +2,12 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-interface Event {
+export interface Event {
   id: string
   title: string
   description: string
   date: string
+  backgroundColor: string
 }
 
 interface EventsStore {

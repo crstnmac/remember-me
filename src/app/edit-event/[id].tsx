@@ -2,25 +2,30 @@ import React, { useState } from 'react';
 import { Box, useTheme, Input, Touchable, Button } from '@adaptui/react-native-tailwind';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Platform } from 'react-native';
-import { useEventsStore } from '../store/useEventsStore';
-import { router } from 'expo-router';
-import * as Crypto from 'expo-crypto'
-import ColorPicker from '../components/ColorPicker';
+import { useEventsStore } from '../../store/useEventsStore';
+import { router, useLocalSearchParams } from 'expo-router';
+import ColorPicker from '../../components/ColorPicker';
 
 
-export default function AddEventModal() {
+export default function EditEventModal() {
+
+  const { id } = useLocalSearchParams()
+
+  const events = useEventsStore(state => state.events)
+
+  const event = events.find(event => event.id === id)
 
   const tw = useTheme()
 
-  const add = useEventsStore(state => state.addEvent)
+  const updateEvent = useEventsStore(state => state.updateEvent)
 
   const [date, setDate] = useState(new Date())
   const [showPicker, setShowPicker] = useState(false)
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [eventDate, setEventDate] = useState('')
-  const [backgroundColor, setBackgroundColor] = useState(tw.getColor('bg-white-900') || '#ffffff')
+  const [title, setTitle] = useState(event?.title)
+  const [description, setDescription] = useState(event?.description)
+  const [eventDate, setEventDate] = useState(event?.date)
+  const [backgroundColor, setBackgroundColor] = useState(event?.backgroundColor || '#ffffff')
 
   function togglePicker() {
     setShowPicker(!showPicker)
@@ -47,12 +52,12 @@ export default function AddEventModal() {
     togglePicker()
   }
 
-  function addEvent() {
-    add({
-      id: Crypto.randomUUID(),
-      title: title,
-      description: description,
-      date: eventDate,
+  function update() {
+    updateEvent(id as string, {
+      id: id as string,
+      title: title || '',
+      description: description || '',
+      date: eventDate || '',
       backgroundColor: backgroundColor
     })
     router.back()
@@ -63,10 +68,10 @@ export default function AddEventModal() {
       <Box style={tw.style('flex-1 items-center justify-center')}>
         <Box style={tw.style('flex-1 w-full h-full')}>
           <Box style={tw.style('w-full p-2')}>
-            <Input placeholder='Title' value='' size='xl' onChangeText={setTitle} />
+            <Input placeholder='Title' value={title} size='xl' onChangeText={setTitle} />
           </Box>
           <Box style={tw.style('w-full p-2')}>
-            <Input placeholder='Description' value='' size='xl' onChangeText={setDescription} />
+            <Input placeholder='Description' value={description} size='xl' onChangeText={setDescription} />
           </Box>
           <Box style={tw.style('w-full p-2')}>
             {!showPicker && (<Touchable onPress={togglePicker}>
@@ -97,21 +102,20 @@ export default function AddEventModal() {
                 </Box>
               )
             }
-
-            <Box style={tw.style('w-full pt-4')}>
-              <ColorPicker color={backgroundColor} onChange={setBackgroundColor} />
+          </Box>
+          <Box style={tw.style('w-full p-2')}>
+            <ColorPicker color={backgroundColor} onChange={setBackgroundColor} />
+          </Box>
+          <Box style={tw.style('flex-row justify-between items-center p-2 gap-2')}>
+            <Box style={tw.style('flex-1')}>
+              <Button variant='outline' size='xl' themeColor='base' onPress={() => router.back()}>
+                Cancel
+              </Button>
             </Box>
-            <Box style={tw.style('flex-row justify-between items-center py-4 gap-2')}>
-              <Box style={tw.style('flex-1')}>
-                <Button variant='outline' size='xl' themeColor='base' onPress={() => router.back()}>
-                  Cancel
-                </Button>
-              </Box>
-              <Box style={tw.style('flex-1')}>
-                <Button variant='solid' size='xl' themeColor='primary' onPress={addEvent}>
-                  Add
-                </Button>
-              </Box>
+            <Box style={tw.style('flex-1')}>
+              <Button variant='solid' size='xl' themeColor='success' onPress={update}>
+                Update
+              </Button>
             </Box>
           </Box>
         </Box>

@@ -61,9 +61,12 @@ function RootLayoutNav() {
           <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
               <Stack.Screen name="add-event" options={{
                 title: 'Add Event',
+                presentation: 'modal',
+              }} />
+              <Stack.Screen name="edit-event/[id]" options={{
+                title: 'Edit Event',
                 presentation: 'modal',
               }} />
             </Stack>
