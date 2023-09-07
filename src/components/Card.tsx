@@ -1,6 +1,7 @@
 import { Box, Button, Text, useTheme } from "@adaptui/react-native-tailwind"
 import { Event, useEventsStore } from "../store/useEventsStore"
 import { router } from "expo-router"
+import CountDownTimer from "./CountdownTimer"
 
 interface CardProps {
   item: Event
@@ -17,14 +18,6 @@ export default function Card(props:CardProps) {
   function goToEditEvent(id: string) {
     router.push(`/edit-event/${id}`)
   }
-
-  function numberOfDaysUntil(date: string) {
-    const today = new Date()
-    const eventDate = new Date(date)
-    const diffTime = Math.abs(eventDate.getTime() - today.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays
-  }
   
   return (
     <Button variant='outline' themeColor='base' size="xl" onLongPress={() =>removeEvent(item.id)} onPress={() => goToEditEvent(item.id)} style={{
@@ -37,11 +30,9 @@ export default function Card(props:CardProps) {
         <Text style={[tw.style('text-lg font-semibold'),{
           color: item?.color?.textColor
         }]}>{item.description}</Text>
-        <Text style={[tw.style('text-lg font-semibold'),{
-          color: item?.color?.textColor
-        }]}>
-          {numberOfDaysUntil(item.date)} days until {item.date}
-        </Text>
+        <CountDownTimer color={
+          item?.color?.textColor
+        }  initialTime={item.date} />
       </Box>
     </Button>
   )

@@ -1,8 +1,9 @@
 import { useEventsStore } from '../../store/useEventsStore';
 import { Button, useTheme, Box, Text } from '@adaptui/react-native-tailwind';
 import { FlatList } from 'react-native-gesture-handler';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import Card from '../../components/Card';
+import Time from '../../components/Time';
 
 export default function TabOneScreen() {
 
@@ -11,7 +12,12 @@ export default function TabOneScreen() {
   const events = useEventsStore(state => state.events)
 
   return (
-    <Box style={tw.style('flex-1 items-center justify-center')}>
+    <Box style={tw.style('flex-1  justify-center')}>
+      <Box style={
+        tw.style('flex-row justify-between items-center p-2')
+      }>
+      <Time />
+      </Box>
       <Box style={tw.style('flex-1 w-full h-full')}>
         <FlatList
           data={events}
@@ -32,7 +38,7 @@ export default function TabOneScreen() {
       <Box style={tw.style('flex-row justify-between items-center gap-2 p-2')}>
         <Box style={tw.style('flex-1')}>
           <Link href='/add-event' asChild>
-            <Button variant='solid' size='xl' themeColor='primary' onPress={() => { }} >
+            <Button variant='solid' size='xl' themeColor='primary' >
               Add
             </Button>
           </Link>

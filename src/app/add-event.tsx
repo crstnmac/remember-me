@@ -37,7 +37,7 @@ export default function AddEventModal() {
 
       if (Platform.OS === 'android') {
         togglePicker()
-        setEventDate(currentDate.toDateString())
+        setEventDate(currentDate.toISOString())
       }
     } else {
       togglePicker()
@@ -45,7 +45,7 @@ export default function AddEventModal() {
   }
 
   function iosConfirmDate() {
-    setEventDate(date.toDateString())
+    setEventDate(date.toISOString())
     togglePicker()
   }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, useTheme, Input, Touchable, Button, Icon } from '@adaptui/react-native-tailwind';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Alert, Platform } from 'react-native';
@@ -21,7 +21,9 @@ export default function EditEventModal() {
   const updateEvent = useEventsStore(state => state.updateEvent)
   const deleteEvent = useEventsStore(state => state.removeEvent)
 
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(
+    event?.date ? new Date(event?.date) : new Date()
+  )
   const [showPicker, setShowPicker] = useState(false)
 
   const [title, setTitle] = useState(event?.title)
@@ -36,24 +38,29 @@ export default function EditEventModal() {
     setShowPicker(!showPicker)
   }
 
-  function onDateChange({ type }: {
-    type: any
-  }, selectedDate: Date | undefined) {
-    if (type === 'set') {
+  const onDateChange = useCallback((
+    event: any,
+    selectedDate: Date | undefined
+  ) => {
+    if (event.type === 'set') {
       const currentDate = selectedDate || date;
       setDate(currentDate);
 
       if (Platform.OS === 'android') {
         togglePicker()
-        setEventDate(currentDate.toDateString())
+        setEventDate(currentDate.toISOString())
       }
     } else {
       togglePicker()
     }
-  }
+  }, [
+    date,
+    togglePicker,
+    setEventDate
+  ])
 
   function iosConfirmDate() {
-    setEventDate(date.toDateString())
+    setEventDate(date.toISOString())
     togglePicker()
   }
 
@@ -71,43 +78,43 @@ export default function EditEventModal() {
 
   return (
     <Box style={tw.style('flex-1')}>
-    <Stack.Screen options={{
-                title: 'Edit Event',
-                presentation: 'modal',
-                headerRight: () => (
-                  <Button
-                  
-                  variant='solid'
-                  themeColor='danger'
-                  onPress={() => {
-                    Alert.alert(
-                      'Delete Event',
-                      'Are you sure you want to delete this event?',
-                      [
-                        {
-                          text: 'Cancel',
-                          style: 'cancel',
-                        },{
-                          text: 'Delete',
-                          style: 'destructive',
-                          onPress: () => {
-                            deleteEvent(id as string)
-                            router.back()
-                          }
-                        }
-                      ]
-                    )
-                   }}>
-                    
-                    <Feather name='trash-2' color="#ffff" size={20} />
+      <Stack.Screen options={{
+        title: 'Edit Event',
+        presentation: 'modal',
+        headerRight: () => (
+          <Button
 
-                  </Button>
-                  
-                )
-                    }}
-                />
+            variant='solid'
+            themeColor='danger'
+            onPress={() => {
+              Alert.alert(
+                'Delete Event',
+                'Are you sure you want to delete this event?',
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  }, {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: () => {
+                      deleteEvent(id as string)
+                      router.back()
+                    }
+                  }
+                ]
+              )
+            }}>
 
-      
+            <Feather name='trash-2' color="#ffff" size={20} />
+
+          </Button>
+
+        )
+      }}
+      />
+
+
       <Box style={tw.style('flex-1 items-center justify-center')}>
         <Box style={tw.style('flex-1 w-full h-full')}>
           <Box style={tw.style('w-full p-2')}>
