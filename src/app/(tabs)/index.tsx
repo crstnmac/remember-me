@@ -31,7 +31,7 @@ export default function TabOneScreen() {
           renderItem={({ item }) => (
               <Card item={item} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `${item.id}-${item.date}`}
         />
       </Box>
 
